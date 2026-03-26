@@ -11,6 +11,11 @@ RUN npm ci
 
 # Copy source and build
 COPY . .
+
+# Pass environment variable at build time
+ARG REACT_APP_API_URL
+ENV REACT_APP_API_URL=$REACT_APP_API_URL
+
 RUN npm run build
 
 
@@ -42,3 +47,14 @@ CMD wget -q -O /dev/null http://localhost || exit 1
 EXPOSE 80
 
 CMD ["nginx", "-g", "daemon off;"]
+
+
+
+For this scenario, I would implement a multi-stage Docker build for the React frontend. In the first stage, I use a Node.js image to install dependencies and build the React application, which generates optimized static files.
+
+In the second stage, I use an Nginx Alpine image to serve these static files. I remove the default Nginx configuration and replace it with a custom configuration to support React routing and API proxying.
+
+To handle environment-specific configurations, I define the API URL as an environment variable (REACT_APP_API_URL) during the build stage using Dockerfile ENV or ARG. This value is injected into the React build at build time, allowing the application to communicate with the backend without hardcoding URLs.
+
+This approach ensures a lightweight, secure, and production-ready image by separating the build and runtime environments, while also enabling flexibility across different environments such as development, staging, and production.
+
