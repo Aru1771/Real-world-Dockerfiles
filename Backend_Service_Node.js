@@ -15,6 +15,9 @@ COPY . .
 # Build the application (for React / Next / TS etc.)
 RUN npm run build
 
+# Remove dev dependencies
+RUN npm prune --omit=dev
+
 # ===============================
 # 2️⃣ Runtime Stage (Minimal & Secure)
 # ===============================
