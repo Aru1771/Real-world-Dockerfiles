@@ -53,6 +53,23 @@ HEALTHCHECK --interval=30s --timeout=5s --start-period=10s --retries=3 \
 # Start app
 CMD ["npm", "start"]
 
+
+---------------
+The Structure
+---------------
+->  node -e: The -e flag stands for execute. It tells Node.js to run the string of code that follows immediately in the terminal, without needing a separate JavaScript file.
+
+-> require('http').get(...): This uses the built-in Node.js HTTP module to send a GET request to your own server at http://localhost:3000.
+
+-> Success Check: r => process.exit(r.statusCode === 200 ? 0 : 1)
+
+-> If the server responds with a 200 OK status, the process exits with code 0 (which tells Docker "I am healthy").
+
+-> If the server responds with anything else (like a 500 error), it exits with code 1 ("I am unhealthy").
+
+-> Error Handling: .on('error', () => process.exit(1))
+
+-> If the server isn't even running or the port is blocked, the request will "error out." This catch-all ensures the health check fails (exit 1) if the connection is refused.
 -----------------------------------------------------------------------------------------------------------------------------------------------------
 
 ✅ Add Graceful Shutdown in Node.js App
@@ -99,3 +116,4 @@ You should see logs:
 
 Shutdown signal received...
 All connections closed. Exiting...
+
