@@ -53,3 +53,49 @@ HEALTHCHECK --interval=30s --timeout=5s --start-period=10s --retries=3 \
 # Start app
 CMD ["npm", "start"]
 
+-----------------------------------------------------------------------------------------------------------------------------------------------------
+
+✅ Add Graceful Shutdown in Node.js App
+
+Update your server.js (or main file):
+
+🐳 Why This Is Important
+
+Without this:
+
+❌ Requests may get killed
+❌ Data loss possible
+❌ Bad for production
+
+With this:
+
+✅ Clean shutdown
+✅ No request loss
+✅ Kubernetes friendly
+
+🔥 How It Works in Real World
+
+When you run:
+
+docker stop <container>
+
+Docker sends:
+
+SIGTERM
+
+Your app handles it properly 👍
+
+🧪 Test It
+
+Run container:
+
+docker run -p 3000:3000 your-image
+
+Then stop:
+
+docker stop <container_id>
+
+You should see logs:
+
+Shutdown signal received...
+All connections closed. Exiting...
